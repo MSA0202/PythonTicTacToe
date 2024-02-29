@@ -29,24 +29,33 @@ class Board:
     def cellUsed(self,cellNumber):
         if self.cell[cellNumber-1] == 'X' or self.cell[cellNumber-1] == 'O':
             print("Cannot play here, pick another cell.")
-        return True
+            return True
+        return False
+    
+    def game(self):
+        XnO = ['X','O']
+        print(self.cell)
+        for i in self.cell: # if all cells still have a numerical string, the game has not finished
+            if i not in XnO: 
+                return False 
+        return True # Otherwise all cellsused
 
     def play(self,user1,user2):
-        user1InputXO = input("Player1, enter the cell where you want to play, example '5':\n")
-        while self.cellUsed(int(user1InputXO)):
-            user1InputXO = input("Player1, enter the cell where you want to play, example '5':\n")
-        self.writeXO(int(user1InputXO), user1)
-        self.drawBoard()
+        if (not self.game()):
+            user1InputXO = input("Player 1, enter the cell where you want to play, example '5':\n")
+            while self.cellUsed(int(user1InputXO)) and (not self.game()):
+                user1InputXO = input("Player 1, you have entered incorrectly enter the cell where you want to play, example '5':\n")
+            self.writeXO(int(user1InputXO), user1)
+            self.drawBoard()
 
-        user2InputXO = input("Player2, enter the cell where you want to play, example '6':\n")
-        while self.cellUsed(int(user2InputXO)):
-            user2InputXO = input("Player1, enter the cell where you want to play, example '5':\n")
-        self.writeXO(int(user2InputXO), user2)
-        self.drawBoard()
+        if (not self.game()):
+            user2InputXO = input("Player 2, enter the cell where you want to play, example '6':\n")
+            while self.cellUsed(int(user2InputXO)) and (not self.game()):
+                print(self.game())
+                user2InputXO = input("Player 2, you have entered incorrectly enter the cell where you want to play, example '6':\n")
+            self.writeXO(int(user2InputXO), user2)
+            self.drawBoard()
             
-    # def game():
-
-    
 
 def main():
     initialize = Board()
@@ -57,8 +66,11 @@ def main():
         initialize.drawBoard()
         XnO = ['x','o']
 
-        user1InputXO = input("Player1, enter X or O and the cell where you want to play, example '3,X':\n")
+        user1InputXO = input("Player 1, enter X or O and the cell where you want to play, example '3,X':\n")
 
+        while (not len(user1InputXO) == 3) or (not (user1InputXO.split(',')[0]).isdigit()) or (user1InputXO.split(',')[1].lower() not in XnO):
+            user1InputXO = input("Player 1, you have entered incorrectly, enter X or O and the cell where you want to play, example '3,X':\n")
+        
         user1CellNumber = int(user1InputXO.split(',')[0])
         user1XO = user1InputXO.split(',')[1]
         XnO.remove(user1XO.lower())
@@ -67,17 +79,18 @@ def main():
         initialize.writeXO(user1CellNumber, user1XO)
         initialize.drawBoard()
 
-        user2InputXO = input(f"Player2, enter the cell where you want to play, example '4':\n")
+        user2InputXO = input(f"Player 2, enter the cell where you want to play, example '4':\n")
 
-        while not user2InputXO.isdigit() or initialize.cellUsed(int(user2InputXO)): #Logic error
-            user2InputXO = input(f"Player2, enter the cell where you want to play, example '4':\n")
+        while not user2InputXO.isdigit() or initialize.cellUsed(int(user2InputXO)):
+            user2InputXO = input(f"Player 2, you entered incorrectly. Only enter the cell where you want to play, example '4':\n")
 
         initialize.writeXO(int(user2InputXO), user2XO)
         initialize.drawBoard()
 
-        # while not game():
-        #     initialize.play(user1XO,user2XO)
-
+        while not initialize.game():
+            initialize.play(user1XO,user2XO)
+            print("Game Still on.")
+        print("Game Over.")
     
     else:
         exit
