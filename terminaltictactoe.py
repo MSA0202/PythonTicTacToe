@@ -27,7 +27,10 @@ class Board:
                 print("Only play X or O.")
 
     def cellUsed(self,cellNumber):
-        if self.cell[cellNumber-1] == 'X' or self.cell[cellNumber-1] == 'O':
+        if not cellNumber>=0 or not cellNumber<=9:
+            print("Cannot play outside the box.")
+            return True
+        elif self.cell[cellNumber-1] == 'X' or self.cell[cellNumber-1] == 'O':
             print("Cannot play here, pick another cell.")
             return True
         return False
@@ -69,7 +72,7 @@ def main():
         user1InputXO = input("Player 1, enter X or O and the cell where you want to play, example '3,X':\n")
 
         while (not len(user1InputXO) == 3) or (not (user1InputXO.split(',')[0]).isdigit()) or (user1InputXO.split(',')[1].lower() not in XnO):
-            user1InputXO = input("Player 1, you have entered incorrectly, enter X or O and the cell where you want to play, example '3,X':\n")
+            user1InputXO = input("Player 1, you have entered incorrectly, enter X or O and the cell where you want to play, example '3,X' ( Range is 0 to 9 ):\n")
         
         user1CellNumber = int(user1InputXO.split(',')[0])
         user1XO = user1InputXO.split(',')[1]
