@@ -1,4 +1,4 @@
-class Board:
+class TicTacToe:
     def __init__(self):
         self.cell = [i+1 for i in range(9)] #Initialize an empty string list which we can use to update our board with x and o
 
@@ -37,31 +37,41 @@ class Board:
     
     def game(self):
         XnO = ['X','O']
-        print(self.cell)
-        for i in self.cell: # if all cells still have a numerical string, the game has not finished
+        for i in self.cell: # If all cells still have a numerical string, the game has not finished
             if i not in XnO: 
                 return False 
-        return True # Otherwise all cellsused
+        return True # Otherwise all cells are used
+    
+    def winner(self):
+        winnerCells = ['123','456','789','147','258','369','157','357']
+        for winnerCell in winnerCells:
+            if self.cell[int(winnerCell[0])-1] == 'X' and self.cell[int(winnerCell[1])-1] == 'X' and self.cell[int(winnerCell[2])-1] == 'X':
+                print("Winner X !")
+                print("Game Over !")
+                exit()
+            elif self.cell[int(winnerCell[0])-1] == 'O' and self.cell[int(winnerCell[1])-1] == 'O' and self.cell[int(winnerCell[2])-1] == 'O':
+                print("Winner O !")
+                print("Game Over !")
+                exit()
 
     def play(self,user1,user2):
-        if (not self.game()):
+        if (not self.game() and not self.winner()):
             user1InputXO = input("Player 1, enter the cell where you want to play, example '5':\n")
-            while self.cellUsed(int(user1InputXO)) and (not self.game()):
+            while self.cellUsed(int(user1InputXO)) and not self.game() and not self.winner():
                 user1InputXO = input("Player 1, you have entered incorrectly enter the cell where you want to play, example '5':\n")
             self.writeXO(int(user1InputXO), user1)
             self.drawBoard()
 
-        if (not self.game()):
+        if (not self.game() and not self.winner()):
             user2InputXO = input("Player 2, enter the cell where you want to play, example '6':\n")
-            while self.cellUsed(int(user2InputXO)) and (not self.game()):
-                print(self.game())
+            while self.cellUsed(int(user2InputXO)) and not self.game() and not self.winner():
                 user2InputXO = input("Player 2, you have entered incorrectly enter the cell where you want to play, example '6':\n")
             self.writeXO(int(user2InputXO), user2)
             self.drawBoard()
             
 
 def main():
-    initialize = Board()
+    initialize = TicTacToe()
 
     Start = input("Would you like to start? ( y/n )\n")
 
@@ -90,13 +100,12 @@ def main():
         initialize.writeXO(int(user2InputXO), user2XO)
         initialize.drawBoard()
 
-        while not initialize.game():
+        while not initialize.game() and not initialize.winner():
             initialize.play(user1XO,user2XO)
-            print("Game Still on.")
-        print("Game Over.")
+        print("Game Over, Draw !")
     
     else:
-        exit
+        exit()
         
 
 if __name__ == '__main__':
